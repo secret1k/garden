@@ -5,4 +5,4 @@ app.MapGet("/", () => "Hello World!");
 
 app.Run();
 
-Console.WriteLine("hello");
+Console.WriteLine("hello world");
