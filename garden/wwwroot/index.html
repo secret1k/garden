@@ -1,97 +1,152 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>main page</title>
+    <link rel="stylesheet" href="css\style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-
 <body>
-    <div id="userInfo" style="display: none;">
-        <p>Добро пожаловать <span id="userName"></span>!</p>
-        <input type="button" value="Выйти" id="logOut" />
+
+    <div class="main-navbar shadow-sm sticky-top">
+        <div class="top-navbar">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+                        <h5 class="brand-name">garden</h5>
+                    </div>
+                    <div class="col-md-5 my-auto">
+                        <form role="search">
+                            <div class="input-group">
+                                <input type="search" placeholder="Search your product" class="form-control" />
+                                <button class="btn bg-white" type="submit">
+                                    <i class="fa fa-search">Search</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-5 my-auto">
+                        <ul class="nav justify-content-end">
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fa fa-shopping-cart"></i> Cart (0)
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fa fa-heart"></i> Wishlist (0)
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user"></i> Profile
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-list"></i> My Orders</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> My Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Log in</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="loginForm">
-        <h3>Вход на сайт</h3>
-        <p>
-            <label>Введите email</label><br />
-            <input type="email" id="email" />
-        </p>
-        <p>
-            <label>Введите пароль</label><br />
-            <input type="password" id="password" />
-        </p>
-        <input type="submit" id="submitLogin" value="Логин" />
-    </div>
-    <p>
-        <input type="submit" id="getData" value="Получить данные" />
-    </p>
-    <script>
-        var tokenKey = "accessToken";
-        // при нажатии на кнопку отправки формы идет запрос к /login для получения токена
-        document.getElementById("submitLogin").addEventListener("click", async e => {
-            e.preventDefault();
-            // отправляет запрос и получаем ответ
-            const response = await fetch("/login", {
-                method: "POST",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: document.getElementById("email").value,
-                    password: document.getElementById("password").value
-                })
-            });
-            // если запрос прошел нормально
-            if (response.ok === true) {
-                // получаем данные
-                const data = await response.json();
-                // изменяем содержимое и видимость блоков на странице
-                document.getElementById("userName").innerText = data.username;
-                document.getElementById("userInfo").style.display = "block";
-                document.getElementById("loginForm").style.display = "none";
-                // сохраняем в хранилище sessionStorage токен доступа
-                sessionStorage.setItem(tokenKey, data.access_token);
-            }
-            else  // если произошла ошибка, получаем код статуса
-                console.log("Status: ", response.status);
-        });
 
-        // кнопка для обращения по пути "/data" для получения данных
-        document.getElementById("getData").addEventListener("click", async e => {
-            e.preventDefault();
-            // получаем токен из sessionStorage
-            const token = sessionStorage.getItem(tokenKey);
-            // отправляем запрос к "/data
-            const response = await fetch("/data", {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": "Bearer " + token  // передача токена в заголовке
-                }
-            });
-
-            if (response.ok === true) {
-                const data = await response.json();
-                alert(data.message);
-            }
-            else
-                console.log("Status: ", response.status);
-        });
-
-        // условный выход - просто удаляем токен и меняем видимость блоков
-        document.getElementById("logOut").addEventListener("click", e => {
-
-            e.preventDefault();
-            document.getElementById("userName").innerText = "";
-            document.getElementById("userInfo").style.display = "none";
-            document.getElementById("loginForm").style.display = "block";
-            sessionStorage.removeItem(tokenKey);
-        });
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>
+
+
+
+<!--<div id="userInfo" style="display: none;">
+    <p>Добро пожаловать <span id="userName"></span>!</p>
+    <input type="button" value="Выйти" id="logOut" />
+</div>
+<div id="loginForm">
+    <h3>Вход на сайт</h3>
+    <p>
+        <label>Введите email</label><br />
+        <input type="email" id="email" />
+    </p>
+    <p>
+        <label>Введите пароль</label><br />
+        <input type="password" id="password" />
+    </p>
+    <input type="submit" id="submitLogin" value="Логин" />
+</div>
+<p>
+    <input type="submit" id="getData" value="Получить данные" />
+</p>
+<script>
+    var tokenKey = "accessToken";
+    // при нажатии на кнопку отправки формы идет запрос к /login для получения токена
+    document.getElementById("submitLogin").addEventListener("click", async e => {
+        e.preventDefault();
+        // отправляет запрос и получаем ответ
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value
+            })
+        });
+        // если запрос прошел нормально
+        if (response.ok === true) {
+            // получаем данные
+            const data = await response.json();
+            // изменяем содержимое и видимость блоков на странице
+            document.getElementById("userName").innerText = data.username;
+            document.getElementById("userInfo").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+            // сохраняем в хранилище sessionStorage токен доступа
+            sessionStorage.setItem(tokenKey, data.access_token);
+        }
+        else  // если произошла ошибка, получаем код статуса
+            console.log("Status: ", response.status);
+    });
+
+    // кнопка для обращения по пути "/data" для получения данных
+    document.getElementById("getData").addEventListener("click", async e => {
+        e.preventDefault();
+        // получаем токен из sessionStorage
+        const token = sessionStorage.getItem(tokenKey);
+        // отправляем запрос к "/data
+        const response = await fetch("/data", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token  // передача токена в заголовке
+            }
+        });
+
+        if (response.ok === true) {
+            const data = await response.json();
+            alert(data.message);
+        }
+        else
+            console.log("Status: ", response.status);
+    });
+
+    // условный выход - просто удаляем токен и меняем видимость блоков
+    document.getElementById("logOut").addEventListener("click", e => {
+
+        e.preventDefault();
+        document.getElementById("userName").innerText = "";
+        document.getElementById("userInfo").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        sessionStorage.removeItem(tokenKey);
+    });
+</script>-->
+
+
 
 <!--<h2>Список товаров</h2>
 <div>
