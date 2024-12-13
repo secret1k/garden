@@ -88,6 +88,8 @@ app.Map("/login/{username}", (string username) =>
 });
 app.Map("/data", [Authorize] () => new { message = "Hello world!" });
 
+app.MapGet("/api/categories", async (ApplicationContext db) => await db.Categories.ToListAsync());
+
 
 app.MapGet("/api/products", async (ApplicationContext db) => await db.Products.ToListAsync());
 app.MapGet("/api/products/{id:int}", async (int id, ApplicationContext db) =>

@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\index.html" />
   </ItemGroup>
 
