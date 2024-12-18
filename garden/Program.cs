@@ -7,13 +7,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-// условная бд с пользователями
-var people = new List<Person>
-{
-    new Person("tom@gmail.com", "12345"),
-    new Person("bob@gmail.com", "55555")
-};
-
 var builder = WebApplication.CreateBuilder();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -50,28 +43,28 @@ app.UseStaticFiles();
 
 app.MapPost("/login", (Person loginData) =>
 {
-    // находим пользователя
-    Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
-    // если пользователь не найден, отправляем статусный код 401
-    if (person is null) return Results.Unauthorized();
+    //// находим пользователя
+    //Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
+    //// если пользователь не найден, отправляем статусный код 401
+    //if (person is null) return Results.Unauthorized();
 
-    var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Email) };
-    // создаем JWT-токен
-    var jwt = new JwtSecurityToken(
-        issuer: AuthOptions.ISSUER,
-        audience: AuthOptions.AUDIENCE,
-        claims: claims,
-        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-    var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+    //var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Email) };
+    //// создаем JWT-токен
+    //var jwt = new JwtSecurityToken(
+    //    issuer: AuthOptions.ISSUER,
+    //    audience: AuthOptions.AUDIENCE,
+    //    claims: claims,
+    //    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+    //    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+    //var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-    // формируем ответ
-    var response = new
-    {
-        access_token = encodedJwt,
-        username = person.Email
-    };
-    return Results.Json(response);
+    //// формируем ответ
+    //var response = new
+    //{
+    //    access_token = encodedJwt,
+    //    username = person.Email
+    //};
+    //return Results.Json(response);
 });
 app.Map("/login/{username}", (string username) =>
 {
@@ -86,7 +79,8 @@ app.Map("/login/{username}", (string username) =>
 
     return new JwtSecurityTokenHandler().WriteToken(jwt);
 });
-app.Map("/data", [Authorize] () => new { message = "Hello world!" });
+
+//app.Map("/data", [Authorize] () => new { message = "Hello world!" });
 
 app.MapGet("/api/categories", async (ApplicationContext db) => await db.Categories.ToListAsync());
 
