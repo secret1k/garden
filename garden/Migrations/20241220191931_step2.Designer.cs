@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace garden.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241220024134_ResetDb")]
-    partial class ResetDb
+    [Migration("20241220191931_step2")]
+    partial class step2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace garden.Migrations
                         {
                             CategoryId = 1,
                             Img = "none",
-                            Name = "cat1"
+                            Name = "category1"
                         },
                         new
                         {
                             CategoryId = 2,
                             Img = "none",
-                            Name = "cat2"
+                            Name = "category2"
                         });
                 });
 
@@ -206,6 +206,10 @@ namespace garden.Migrations
 
                     b.HasKey("ReviewId");
 
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("Reviews");
                 });
 
@@ -266,6 +270,25 @@ namespace garden.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Review", b =>
+                {
+                    b.HasOne("Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Category", b =>

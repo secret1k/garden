@@ -6,6 +6,5 @@
     public int Price { get; set; }
     public string Img { get; set; } = "";
     public int CategoryId { get; set; }
-
     public Category? Category { get; set; } // навигационное свойство
 }

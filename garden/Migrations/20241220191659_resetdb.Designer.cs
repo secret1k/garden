@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace garden.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241220191659_resetdb")]
+    partial class resetdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,26 +211,6 @@ namespace garden.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
-
-                    b.HasData(
-                        new
-                        {
-                            ReviewId = 1,
-                            Comment = "comment1",
-                            CreatedAt = new DateTime(2024, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProductId = 1,
-                            Rating = 5,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            ReviewId = 2,
-                            Comment = "comment2",
-                            CreatedAt = new DateTime(2024, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProductId = 2,
-                            Rating = 3,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("User", b =>
@@ -257,24 +240,6 @@ namespace garden.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Email = "user1@example.com",
-                            Name = "User1",
-                            Password = "password",
-                            Role = "Customer"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Email = "user2@example.com",
-                            Name = "User2",
-                            Password = "password",
-                            Role = "Customer"
-                        });
                 });
 
             modelBuilder.Entity("Category", b =>
