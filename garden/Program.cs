@@ -43,6 +43,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapControllers();
+
 app.MapPost("/login", (Person loginData) =>
 {
     //// находим пользователя
@@ -83,8 +84,6 @@ app.Map("/login/{username}", (string username) =>
 });
 
 //app.Map("/data", [Authorize] () => new { message = "Hello world!" });
-
-app.MapGet("/api/categories", async (ApplicationContext db) => await db.Categories.ToListAsync());
 
 app.Run();
 

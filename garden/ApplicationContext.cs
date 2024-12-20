@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 public class ApplicationContext : DbContext
 {
     public DbSet<Category> Categories { get; set; } = null!;
@@ -15,6 +16,23 @@ public class ApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // настройка связей
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Category>()
+            .HasOne(c => c.ParentCategory)
+            .WithMany(c => c.Subcategories)
+            .HasForeignKey(c => c.ParentCategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.User)
+            .WithMany(u => u.Orders)
+            .HasForeignKey(o => o.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<Category>().HasData(
             new Category { CategoryId = 1, Name = "cat1", Img = "none" },
             new Category { CategoryId = 2, Name = "cat2", Img = "none" }
@@ -24,5 +42,15 @@ public class ApplicationContext : DbContext
             new Product { ProductId = 2, Name = "prod2", CategoryId = 1, Description = "mid", Price = 99, Img = "none" },
             new Product { ProductId = 3, Name = "prod3", CategoryId = 2, Description = "good", Price = 130, Img = "none" }
             );
+        modelBuilder.Entity<User>().HasData(
+        new User { UserId = 1, Name = "Ivan", Email = "ivan@example.com", Password = "12345", Role = "admin" },
+        new User { UserId = 2, Name = "Lisa", Email = "lisa@example.com", Password = "abcde", Role = "customer" }
+            );
+        modelBuilder.Entity<Order>().HasData(
+            new Order { OrderId = 1, UserId = 1, TotalPrice = 250, Status = "Pending", Date = DateTime.Now },
+            new Order { OrderId = 2, UserId = 2, TotalPrice = 450, Status = "Processed", Date = DateTime.Now }
+            );
+
+        base.OnModelCreating(modelBuilder);
     }
 }

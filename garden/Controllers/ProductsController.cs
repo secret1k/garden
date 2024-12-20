@@ -15,8 +15,39 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
-        var products = await _context.Products.ToListAsync();
+        var products = await _context.Products
+            .Include(p => p.Category)
+            .Select(p => new
+            {
+                p.ProductId,
+                p.Name,
+                p.Description,
+                p.Price,
+                p.Img,
+                p.CategoryId,
+                Category = new
+                {
+                    p.Category.CategoryId,
+                    p.Category.Name,
+                    p.Category.Img
+                }
+            })
+            .ToListAsync();
+
         return Ok(products);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetProduct(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+
+        if (product == null)
+        {
+            return NotFound("product not found");
+        }
+
+        return product;
     }
 
     [HttpPost]
@@ -27,7 +58,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateProduct([FromBody] Product product)
     {
         var existingProduct = await _context.Products.FindAsync(product.ProductId);
