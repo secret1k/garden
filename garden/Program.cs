@@ -6,12 +6,17 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+     {
+         // Настройка сериализации для игнорирования циклических ссылок
+         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+     });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

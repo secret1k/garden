@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace garden.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241220202429_OrdersStep3")]
+    partial class OrdersStep3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,24 +90,6 @@ namespace garden.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-
-                    b.HasData(
-                        new
-                        {
-                            OrderId = 1,
-                            Date = new DateTime(2024, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = "Completed",
-                            TotalPrice = 200,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            OrderId = 2,
-                            Date = new DateTime(2024, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = "Pending",
-                            TotalPrice = 99,
-                            UserId = 2
-                        });
                 });
 
             modelBuilder.Entity("OrderItem", b =>
@@ -134,24 +119,6 @@ namespace garden.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderItems");
-
-                    b.HasData(
-                        new
-                        {
-                            OrderItemId = 1,
-                            OrderId = 1,
-                            Price = 100,
-                            ProductId = 1,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            OrderItemId = 2,
-                            OrderId = 2,
-                            Price = 99,
-                            ProductId = 2,
-                            Quantity = 1
-                        });
                 });
 
             modelBuilder.Entity("Product", b =>
