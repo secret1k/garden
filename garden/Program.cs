@@ -12,33 +12,26 @@ var builder = WebApplication.CreateBuilder();
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 builder.Services.AddControllers();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // добавление сервисов аутентификации
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // указывает, будет ли валидироваться издатель при валидации токена
             ValidateIssuer = true,
-            // строка, представляющая издателя
             ValidIssuer = AuthOptions.ISSUER,
-            // будет ли валидироваться потребитель токена
             ValidateAudience = true,
-            // установка потребителя токена
             ValidAudience = AuthOptions.AUDIENCE,
-            // будет ли валидироваться время существования
             ValidateLifetime = true,
-            // установка ключа безопасности
             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            // валидация ключа безопасности
             ValidateIssuerSigningKey = true
         };
 });
-builder.Services.AddAuthorization();  // добавление сервисов авторизации
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-app.UseAuthentication();  // добавление middleware аутентификации
-app.UseAuthorization();  // добавление middleware авторизации
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
@@ -83,15 +76,13 @@ app.Map("/login/{username}", (string username) =>
     return new JwtSecurityTokenHandler().WriteToken(jwt);
 });
 
-//app.Map("/data", [Authorize] () => new { message = "Hello world!" });
-
 app.Run();
 
 public class AuthOptions
 {
-    public const string ISSUER = "MyAuthServer"; // издатель токена
-    public const string AUDIENCE = "MyAuthClient";  // потребитель токена
-    const string KEY = "myreallyreally_forrealhiddensecretmagickey!123456";  // ключ для шифрации
+    public const string ISSUER = "MyAuthServer";
+    public const string AUDIENCE = "MyAuthClient";
+    const string KEY = "myreallyreally_forrealhiddensecretmagickey!123456";
     public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
 };

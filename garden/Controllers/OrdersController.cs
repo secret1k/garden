@@ -12,35 +12,35 @@ public class OrderController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetOrders()
-    {
-        var orders = await _context.Orders
-            .Include(o => o.User)
-            .ToListAsync();
-        return Ok(orders);
-    }
+    //[HttpGet]
+    //public async Task<IActionResult> GetOrders()
+    //{
+    //    var orders = await _context.Orders
+    //        .Include(o => o.User)
+    //        .ToListAsync();
+    //    return Ok(orders);
+    //}
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrder(int id)
-    {
-        var order = await _context.Orders
-            .Include(o => o.User)
-            .FirstOrDefaultAsync(o => o.OrderId == id);
+    //[HttpGet("{id}")]
+    //public async Task<IActionResult> GetOrder(int id)
+    //{
+    //    var order = await _context.Orders
+    //        .Include(o => o.User)
+    //        .FirstOrDefaultAsync(o => o.OrderId == id);
 
-        if (order == null)
-            return NotFound();
+    //    if (order == null)
+    //        return NotFound();
 
-        return Ok(order);
-    }
+    //    return Ok(order);
+    //}
 
-    [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] Order order)
-    {
-        _context.Orders.Add(order);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
-    }
+    //[HttpPost]
+    //public async Task<IActionResult> CreateOrder([FromBody] Order order)
+    //{
+    //    _context.Orders.Add(order);
+    //    await _context.SaveChangesAsync();
+    //    return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
+    //}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order order)

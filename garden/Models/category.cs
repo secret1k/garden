@@ -5,6 +5,6 @@
     public string Img { get; set; } = "";
     public int? ParentCategoryId { get; set; }
 
-    public Category? ParentCategory { get; set; }  // навигационное свойство для родительской категории
-    public List<Category> Subcategories { get; set; } = new();  // навигационное свойство для подкатегорий
+    public Category? ParentCategory { get; set; }
+    public List<Category> Subcategories { get; set; } = new();
 }
